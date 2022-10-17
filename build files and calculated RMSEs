@@ -1,0 +1,51 @@
+import shutil,os,time
+from pathlib import Path
+print (Path.cwd())
+os.chdir('/media/ftx/dpgen/1MgKNaCl-5H2O/test')
+for i_1 in range (13,17):
+	os.makedirs(f"iter{i_1}")
+	print(f"iter{i_1} has been created")
+	os.chdir('/media/ftx/dpgen/1MgKNaCl-5H2O/test' +"/"+ f"iter{i_1}")
+	os.makedirs("init")
+	os.chdir('/media/ftx/dpgen/1MgKNaCl-5H2O/test' +"/"+ f"iter{i_1}" +"/"+ "init")
+	for n_1 in range (1,5):
+		os.makedirs(f"m{n_1}")
+	os.chdir('/media/ftx/dpgen/1MgKNaCl-5H2O/test' +"/"+ f"iter{i_1}")
+	for i_2 in range(1,i_1+1):
+	  os.makedirs(f"fp{i_2}")
+	  os.chdir('/media/ftx/dpgen/1MgKNaCl-5H2O/test' +"/"+ f"iter{i_1}" +"/"+f"fp{i_2}")
+	  for n in range (1,5):
+		  os.makedirs(f"m{n}")
+	  os.chdir('/media/ftx/dpgen/1MgKNaCl-5H2O/test' +"/"+ f"iter{i_1}")
+	os.chdir('/media/ftx/dpgen/1MgKNaCl-5H2O/test')
+p0=Path("/media/ftx/dpgen/1MgKNaCl-5H2O")
+p0_list=os.listdir('/media/ftx/dpgen/1MgKNaCl-5H2O')
+print(p0_list)
+for index_1,item_1 in enumerate(p0_list[24:29]):
+	os.chdir('/media/ftx/dpgen/1MgKNaCl-5H2O'+ "/" + f"iter.0000{index_1+13}" + "/" + "00.train")	
+	p1=Path.cwd()
+	p1_list=os.listdir(p1)
+	print(p1_list)
+	for index_2, item_2 in enumerate(p1_list[2:6]):
+		os.chdir('/media/ftx/dpgen/1MgKNaCl-5H2O'+ "/" + f"iter.0000{index_1+13}" + "/" + "00.train" + "/" + f"{item_2}")
+		os.system("nohup /root/deepmd-kit/bin/dp test -s ../data.init/data -n 100 -d results &")
+		time.sleep(20)
+		shutil.move("nohup.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/init/m{index_2+1}/nohup.out")
+		shutil.move("results.e.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/init/m{index_2+1}/results.e.out")
+		shutil.move("results.f.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/init/m{index_2+1}/results.f.out")
+		shutil.move("results.v.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/init/m{index_2+1}/results.v.out")
+		for i_3 in range (10):
+			os.system(f"nohup /root/deepmd-kit/bin/dp test -s ../data.iters/iter.00000{i_3}/02.fp/data.000 -n 100 -d results&")
+			time.sleep(20)
+			shutil.move("nohup.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/fp{i_3+1}/m{index_2+1}/nohup.out")
+			shutil.move("results.e.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/fp{i_3+1}/m{index_2+1}/results.e.out")
+			shutil.move("results.f.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/fp{i_3+1}/m{index_2+1}/results.f.out")
+			shutil.move("results.v.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/fp{i_3+1}/m{index_2+1}/results.v.out")
+		for i_4 in range (index_1+3):
+			os.system(f"nohup /root/deepmd-kit/bin/dp test -s ../data.iters/iter.00001{i_4}/02.fp/data.000 -n 100 -d results &")
+			time.sleep(20)
+			shutil.move("nohup.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/fp{i_4+11}/m{index_2+1}/nohup.out")
+			shutil.move("results.e.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/fp{i_4+11}/m{index_2+1}/results.e.out")
+			shutil.move("results.f.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/fp{i_4+11}/m{index_2+1}/results.f.out")
+			shutil.move("results.v.out",f"/media/ftx/dpgen/1MgKNaCl-5H2O/test/iter{index_1+13}/fp{i_4+11}/m{index_2+1}/results.v.out")
+print("finished")
